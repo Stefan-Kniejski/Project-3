@@ -5,26 +5,45 @@
     <title>Weather Dashboard</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://openweathermap.org/themes/openweathermap/assets/vendor/owm/css/owm_3.1.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
 <body>
     <h1>Weather Dashboard</h1>
 
     <!-- Container for the city input and button -->
     <div id="city-input-container">
-        <label for="city-input">Enter a City:</label>
+        <label for "city-input">Enter a City:</label>
         <input type="text" id="city-input" placeholder="Type a city name and press 'Show Weather'">
         <button id="show-weather-button">Show Weather</button>
     </div>
 
     <!-- Container for the map -->
-    <div id="map" style="width: 50%; height: 400px;"></div>
+    <div id="map" style="width: 75%; height: 400px;"></div>
 
-    <!-- Container for the temperature in Celsius and Fahrenheit -->
-    <div id="temperature-container">
-        <h2>Temperature</h2>
-        <p>Celsius: <span id="temperature-celsius"></span>°C</p>
-        <p>Fahrenheit: <span id="temperature-fahrenheit"></span>°F</p>
+    <!-- Container for temperature and weather information -->
+    <div id="weather-info-container">
+        <h2>Current Weather</h2>
+        <p>Temperature (Celsius / Fahrenheit): <span id="temperature-celsius"></span>°C / <span id="temperature-fahrenheit"></span>°F</p>
+        <p>Humidity: <span id="humidity"></span>%</p>
+        <p>Precipitation: <span id="precipitation"></span> mm</p>
+        <p>Cloudiness: <span id="cloudiness"></span>%</p>
+        <p>Wind Speed: <span id="wind-speed"></span> m/s</p>
+    </div>
+
+    <!-- Container for the bar charts -->
+    <div id="chart-container">
+        <h2>Temperature Forecast</h2>
+        <div class="chart-wrapper">
+            <canvas id="high-temperature-chart" width="400" height="200"></canvas>
+            <canvas id="low-temperature-chart" width="400" height="200"></canvas>
+            <canvas id="temperature-chart-celsius" width="400" height="200"></canvas>
+            <canvas id="temperature-chart-fahrenheit" width="400" height="200"></canvas>
+        </div>
+    </div>
+    
+
     </div>
 
     <!-- Load Leaflet library from a known CDN -->
@@ -32,13 +51,3 @@
     <script src="app.js"></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
