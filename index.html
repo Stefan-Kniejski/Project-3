@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>Weather Dashboard</h1>
+
+    <!-- Container for the city input and button -->
+    <div id="city-input-container">
+        <label for="city-input">Enter a City:</label>
+        <input type="text" id="city-input" placeholder="Type a city name and press 'Show Weather'">
+        <button id="show-weather-button">Show Weather</button>
+    </div>
+
+    <!-- Container for the map -->
+    <div id="map" style="width: 50%; height: 400px;"></div>
+
+    <!-- Container for the temperature in Celsius and Fahrenheit -->
+    <div id="temperature-container">
+        <h2>Temperature</h2>
+        <p>Celsius: <span id="temperature-celsius"></span>°C</p>
+        <p>Fahrenheit: <span id="temperature-fahrenheit"></span>°F</p>
+    </div>
+
+    <!-- Load Leaflet library from a known CDN -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
