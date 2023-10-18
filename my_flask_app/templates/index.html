@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Weather App</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+</head>
+<body>
+    <input type="text" id="destination" placeholder="Enter a city">
+    <button id="submit">Get Weather</button>
+    <div id="weather-info"></div>
+    <div id="map" style="width: 400px; height: 400px;"></div>
+    
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script>
+        let map = L.map('map').setView([0, 0], 1);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+        d3.select("#submit").on("click", function () {
+            let city = d3.select("#destination").property("value");
+            if (city) {
+                fetch('/get_weather', {
+                    method: 'POST',
+                    body: new URLSearchParams({ 'city': city }),
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    displayWeather(data);
+                    displayMap(data.coord);
+                });
+            }
+        });
+
+        function displayWeather(data) {
+            let weatherInfo = d3.select("#weather-info");
+            weatherInfo.html(""); // Clear previous data
+
+            if (data.main && data.weather) {
+                let temperature = data.main.temp;
+                let description = data.weather[0].description;
+
+                weatherInfo.append("p").text(`City: ${data.name}`);
+                weatherInfo.append("p").text(`Temperature: ${temperature} °F`);
+                weatherInfo.append("p").text(`Description: ${description}`);
+            } else {
+                weatherInfo.append("p").text("Weather data not found.");
+            }
+        }
+
+        function displayMap(coord) {
+            map.setView([coord.lat, coord.lon], 10);
+            let marker = L.marker([coord.lat, coord.lon]).addTo(map);
+
+            let openWeatherMapUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${coord.lat}&lon=${coord.lon}&appid=${apiKey}&units=${units}`;
+            fetch(openWeatherMapUrl)
+            .then(response => response.json())
+            .then(data => {
+                if (data) {
+                    marker.bindPopup(createWeatherPopupContent(data)).openPopup();
+                }
+            });
+        }
+
+        function createWeatherPopupContent(data) {
+            if (data.main && data.weather) {
+                let feelsLike = data.main.feels_like;
+                let humidity = data.main.humidity;
+                let pressure = data.main.pressure;
+                let description = data.weather[0].description;
+
+                const content = `
+                    <p>City: ${data.name}</p>
+                    <p>Feels Like: ${feelsLike} °F</p>
+                    <p>Humidity: ${humidity}%</p>
+                    <p>Pressure: ${pressure} hPa</p>
+                    <p>Description: ${description}</p>
+                `;
+
+                return content;
+            } else {
+                return "Weather data not found.";
+            }
+        }
+    </script>
+</body>
+</html>
+
+
