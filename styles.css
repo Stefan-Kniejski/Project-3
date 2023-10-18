@@ -19,3 +19,15 @@ canvas {
     height: auto;
 }
 
+.chart-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin-top: -180px; /* Adjust the margin-top to raise the chart container */
+}
+
+canvas {
+    max-width: 100%;
+    height: auto;
+}
