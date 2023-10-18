@@ -10,7 +10,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 // Function to create the bar charts
-function createDoubleBarChart(chartID, labels, highData, lowData, dates, yAxisLabel, title) {
+function createDoubleBarChart(chartID, labels, highData, lowData, yAxisLabel, title) {
     const ctx = document.getElementById(chartID).getContext('2d');
     new Chart(ctx, {
         type: 'bar',
@@ -116,45 +116,40 @@ document.getElementById('show-weather-button').addEventListener('click', () => {
 
             map.setView(cityCoordinates, 8);
 
-            // Fetch weather forecast data
+            // Fetch daily weather forecast data for the next 6 days
             fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${enteredCity}&appid=${apiKey}`)
                 .then((response) => response.json())
                 .then((data) => {
-                    // Extract one entry per day for the upcoming week
+                    // Extract one entry per day for the next 6 days (excluding the last 2 days)
                     const forecastData = data.list;
-                    const uniqueDays = {};
                     const labels = [];
                     const highTemperatureCelsius = [];
                     const lowTemperatureCelsius = [];
                     const highTemperatureFahrenheit = [];
                     const lowTemperatureFahrenheit = [];
-                    const dates = [];
 
-                    forecastData.forEach((item) => {
-                        const date = new Date(item.dt * 1000); // Convert timestamp to date
-                        const formattedDate = `${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}/${date.getFullYear()}`;
-                    
-                        const day = date.toLocaleDateString('en-US', { weekday: 'short' });
-                    
-                        if (!uniqueDays[day]) {
-                            uniqueDays[day] = true;
-                            labels.push(day + '\n' + formattedDate); // Include both day of the week and date
-                            dates.push(formattedDate);
-                            highTemperatureCelsius.push(
-                                (item.main.temp_max - 273.15).toFixed(2)
+                    const today = new Date(); // Get the current date
+                    for (let i = 0; i < 6; i++) {
+                        const date = new Date(today.getTime() + i * 24 * 60 * 60 * 1000);
+                        const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+
+                        labels.push(formattedDate);
+                        const dailyData = forecastData.filter((item) => {
+                            const itemDate = new Date(item.dt * 1000);
+                            return (
+                                itemDate.getFullYear() === date.getFullYear() &&
+                                itemDate.getMonth() === date.getMonth() &&
+                                itemDate.getDate() === date.getDate()
                             );
-                            lowTemperatureCelsius.push(
-                                (item.main.temp_min - 273.15).toFixed(2)
-                            );
-                            highTemperatureFahrenheit.push(
-                                ((item.main.temp_max - 273.15) * 9 / 5 + 32).toFixed(2)
-                            );
-                            lowTemperatureFahrenheit.push(
-                                ((item.main.temp_min - 273.15) * 9 / 5 + 32).toFixed(2)
-                            );
-                        }
-                    });
-                    
+                        });
+                        const highTemp = Math.max(...dailyData.map((item) => item.main.temp));
+                        const lowTemp = Math.min(...dailyData.map((item) => item.main.temp));
+
+                        highTemperatureCelsius.push((highTemp - 273.15).toFixed(2));
+                        lowTemperatureCelsius.push((lowTemp - 273.15).toFixed(2));
+                        highTemperatureFahrenheit.push(((highTemp - 273.15) * 9 / 5 + 32).toFixed(2));
+                        lowTemperatureFahrenheit.push(((lowTemp - 273.15) * 9 / 5 + 32).toFixed(2));
+                    }
 
                     // Create and update the double bar charts for Celsius and Fahrenheit
                     createDoubleBarChart(
@@ -162,8 +157,7 @@ document.getElementById('show-weather-button').addEventListener('click', () => {
                         labels,
                         highTemperatureCelsius,
                         lowTemperatureCelsius,
-                        dates,
-                        'Temperature (°C)',
+                        'Temperature Forecast (°C)',
                         'Temperature Forecast (°C)'
                     );
                     createDoubleBarChart(
@@ -171,8 +165,7 @@ document.getElementById('show-weather-button').addEventListener('click', () => {
                         labels,
                         highTemperatureFahrenheit,
                         lowTemperatureFahrenheit,
-                        dates,
-                        'Temperature (°F)',
+                        'Temperature Forecast (°F)',
                         'Temperature Forecast (°F)'
                     );
                 })
@@ -180,4 +173,3 @@ document.getElementById('show-weather-button').addEventListener('click', () => {
         })
         .catch((error) => console.error(error));
 });
-
