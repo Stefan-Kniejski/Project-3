@@ -24,9 +24,6 @@ amadeus_api_key = "GQioBSxIU0TIjk8NoVQ15YHYtHsnP6IJ"
 amadeus_api_secret = "kajo3AaR6WAYNA8q"
 base_url = "https://test.api.amadeus.com/v2"
 
-# Initialize the Amadeus client with your credentials
-amadeus = Client(client_id='YOUR_API_KEY', client_secret='YOUR_API_SECRET')
-
 # Initialize the Amadeus client
 amadeus = Client(client_id=amadeus_api_key, client_secret=amadeus_api_secret)
 
@@ -86,18 +83,3 @@ def get_airport_code(destination_city):
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-# if origin_code and destination_code:
-            #     access_token = get_access_token()
-            #     amadeus_flight_offers_url = build_amadeus_flight_offers_url(
-            #         origin_code, destination_code, departure_date, adults)
-            #     print(f"TOTAL URL: {amadeus_flight_offers_url}")
-            #     header = {"Authorization": f"Bearer {access_token}"}
-            #     print(f"HEADER: {header}")
-            #     response = requests.get(amadeus_flight_offers_url, headers=header)
-            #     print(f"RESPONSE: {response}")
-            #     response_data = response.json()
-            #     print(f"RESPONSE DATA: {response_data}")
-            #     return jsonify(response_data)
-            # else:
-            #     return jsonify({'error': 'Origin or destination city not found'})
