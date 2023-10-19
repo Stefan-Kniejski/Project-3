@@ -1,4 +1,5 @@
-// <script src="./static/js/app.js"></script>
+// <script src="./static/js/app.js"></script> 
+
 let apiKey = "b94cd3922224f8eb48df6659b31b309b";   
 let units = "imperial"; // You can change to "metric" for Celsius
 
@@ -18,10 +19,14 @@ d3.select("#submit").on("click", function () {
     }
 });
 
+// Declare a variable to store the destination city
+let destinationCity;
+
 // Function to display weather information
 function displayWeather(data) {
     let weatherInfo = d3.select("#weather-info");
     weatherInfo.html(""); // Clear previous data
+    destinationCity = data.name;
 
     if (data.main && data.weather) {
         let temperature = data.main.temp;
@@ -44,7 +49,29 @@ function displayWeather(data) {
             .append("p")
             .text("Weather data not found.");
     }
+    console.log(`Destination City: ${destinationCity}`);
 }
+
+// Function to log coordinates to the console and assign them to variables
+function logCoordinatesToConsole(coord) {
+    latitude = coord.lat;
+    longitude = coord.lon;
+    console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+}
+
+// Listen for the button click event
+d3.select("#submit").on("click", function () {
+    let city = d3.select("#destination").property("value");
+    if (city) {
+        let openWeatherMapUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=${units}`;
+        d3.json(openWeatherMapUrl).then(data => {
+            displayWeather(data);
+            displayMap(data.coord);
+            logCoordinatesToConsole(data.coord); // Log the coordinates and assign them to variables
+        });
+    }
+});
+
 
 // Function to display the map
 function displayMap(coord) {
@@ -86,3 +113,89 @@ function createWeatherPopupContent(data) {
         return "Weather data not found.";
     }
 }
+
+document.getElementById("flightOffersForm").addEventListener("submit", function (e) {
+    e.preventDefault(); // Prevent the form from submitting in the traditional way
+
+    const formData = new FormData(this);
+
+    fetch("/get_flight_offers", {
+        method: 'POST',
+        body: formData,
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            // Handle the error here (e.g., display an error message)
+            console.error("Flight Offers API Error:", data.error);
+        } else {
+            // Display the flight offers data (you can define this function)
+            displayFlightOffersData(data);
+        }
+    });
+});
+
+// creates a list of flight offers with details
+function displayFlightOffersData(data) {
+    const flightOffersInfoDiv = document.getElementById("flightOffersInfo");
+    flightOffersInfoDiv.innerHTML = ""; // Clear any previous data
+
+    if (data.data && data.data.length > 0) {
+        const flightList = document.createElement("ul");
+
+        data.data.forEach(flight => {
+            const flightItem = document.createElement("li");
+            flightItem.innerHTML = `
+                <strong>Departure Location:</strong> ${flight.originLocationCode}<br>
+                <strong>Destination Location:</strong> ${flight.destinationLocationCode}<br>
+                <strong>Departure Date:</strong> ${flight.departureDate}<br>
+                <strong>Price:</strong> ${flight.price.total} ${flight.price.currency}<br>
+                <strong>Number of Adults:</strong> ${flight.numberOfPassengers.adult}<br>
+                <strong>Airlines:</strong> ${flight.flightSegment.carrierCode}<br>
+                <strong>Flight Number:</strong> ${flight.flightSegment.number}<br>
+            `;
+            flightList.appendChild(flightItem);
+        });
+
+        flightOffersInfoDiv.appendChild(flightList);
+    } else {
+        flightOffersInfoDiv.textContent = "No flight offers found for the given criteria.";
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////
+// Function to get weather and airport code
+function getWeatherAndAirportCode(city) {
+    const openWeatherMapUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=${units}`;
+
+    // Make an AJAX request to get weather data and airport code
+    fetch('/get_weather', {
+        method: 'POST',
+        body: new URLSearchParams({ city: city }),
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            console.error("Weather API Error:", data.error);
+        } else {
+            // Extract the airport code from the response
+            const airportCode = data.airport_code;
+
+            // Use the airport code or display it as needed
+            console.log(`Airport Code: ${airportCode}`);
+
+            // Call functions to display weather and map
+            displayWeather(data);
+            displayMap(data.coord);
+        }
+    });
+}
+
+// Listen for the button click event
+d3.select("#submit").on("click", function () {
+    const city = d3.select("#destination").property("value");
+    if (city) {
+        getWeatherAndAirportCode(city); // Call the new function
+    }
+});
