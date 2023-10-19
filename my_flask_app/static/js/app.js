@@ -126,10 +126,10 @@ document.getElementById("flightOffersForm").addEventListener("submit", function 
     .then(response => response.json())
     .then(data => {
         if (data.error) {
-            // Handle the error here (e.g., display an error message)
+            // Handle the error here
             console.error("Flight Offers API Error:", data.error);
         } else {
-            // Display the flight offers data (you can define this function)
+            // Display the flight offers data
             displayFlightOffersData(data);
         }
     });
@@ -164,38 +164,3 @@ function displayFlightOffersData(data) {
 }
 
 /////////////////////////////////////////////////////////////////////////
-// Function to get weather and airport code
-function getWeatherAndAirportCode(city) {
-    const openWeatherMapUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=${units}`;
-
-    // Make an AJAX request to get weather data and airport code
-    fetch('/get_weather', {
-        method: 'POST',
-        body: new URLSearchParams({ city: city }),
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.error) {
-            console.error("Weather API Error:", data.error);
-        } else {
-            // Extract the airport code from the response
-            const airportCode = data.airport_code;
-
-            // Use the airport code or display it as needed
-            console.log(`Airport Code: ${airportCode}`);
-
-            // Call functions to display weather and map
-            displayWeather(data);
-            displayMap(data.coord);
-        }
-    });
-}
-
-// Listen for the button click event
-d3.select("#submit").on("click", function () {
-    const city = d3.select("#destination").property("value");
-    if (city) {
-        getWeatherAndAirportCode(city); // Call the new function
-    }
-});
