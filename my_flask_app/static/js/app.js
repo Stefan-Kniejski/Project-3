@@ -137,35 +137,32 @@ document.getElementById("flightOffersForm").addEventListener("submit", function 
 
 
 /////////////////////////////////////////////////////////////////////////
+// Get the element where you want to display the flight offers
+const flightOffersList = document.getElementById("flightOffersList");
+
+// Function to display flight offer data
 function displayFlightOffersData(data) {
-    const flightOffersInfoDiv = document.getElementById("flightOffersInfo");
-    flightOffersInfoDiv.innerHTML = ""; // Clear any previous data
+    // Clear any previous data
+    flightOffersList.innerHTML = "";
 
-    if (data.length > 0) {
-        const flightList = document.createElement("ul");
-
+    if (Array.isArray(data) && data.length > 0) {
         data.forEach(flight => {
             const flightItem = document.createElement("li");
             flightItem.innerHTML = `
-                <strong>Departure Location:</strong> ${flight.originLocationCode}<br>
-                <strong>Destination Location:</strong> ${flight.destinationLocationCode}<br>
-                <strong>Departure Date:</strong> ${flight.departureDate}<br>
-                <strong>Price:</strong> ${flight.price.total} ${flight.price.currency}<br>
-                <strong>Number of Adults:</strong> ${flight.numberOfPassengers.adult}<br>
-                <strong>Airlines:</strong> ${flight.flightSegment.carrierCode}<br>
-                <strong>Flight Number:</strong> ${flight.flightSegment.number}<br>
+                <strong>Flight Type:</strong> ${flight.type}<br>
+                <strong>Flight ID:</strong> ${flight.id}<br>
+                <strong>Source:</strong> ${flight.source}<br>
+                <strong>Instant Ticketing Required:</strong> ${flight.instantTicketingRequired}<br>
+                <strong>Non-Homogeneous:</strong> ${flight.nonHomogeneous}<br>
+                <strong>One Way:</strong> ${flight.oneWay}<br>
+                <strong>Last Ticketing Date:</strong> ${flight.lastTicketingDate}<br>
+                <strong>Last Ticketing Date Time:</strong> ${flight.lastTicketingDateTime}<br>
+                <strong>Number of Bookable Seats:</strong> ${flight.numberOfBookableSeats}<br>
+                <!-- Add more flight details here -->
             `;
-            flightList.appendChild(flightItem);
+            flightOffersList.appendChild(flightItem);
         });
-
-        flightOffersInfoDiv.appendChild(flightList);
     } else {
-        flightOffersInfoDiv.textContent = "No flight offers found for the given criteria.";
+        flightOffersList.textContent = "No flight offers found for the given criteria.";
     }
 }
-// Assuming that you have received the flight data as a JSON string
-const jsonData = `{{ flight_data | tojson }}`; // Replace flight_data with the actual variable name
-
-// Parse the JSON data and call the display function
-const flightData = JSON.parse(jsonData);
-displayFlightOffersData(flightData);

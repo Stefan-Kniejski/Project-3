@@ -64,7 +64,7 @@ def get_flight_offers():
             print(f"RESPONSE: {response}")
             response_data = response.data
             data = json.dumps(response_data)
-            #print(f"DATA: {data}")
+            print(f"DATA: {data}")
             return data
         else:
             return jsonify({'error': 'Origin or destination city not found'})
