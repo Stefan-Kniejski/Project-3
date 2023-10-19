@@ -1,6 +1,11 @@
+# INSTALLATION:
+# pip install amadeus
+# pip install sdk
+
 from flask import Flask, render_template, request, jsonify
 from amadeus import Client, ResponseError
 import requests
+import json
 import csv
 from urllib.parse import urlencode
 
@@ -13,13 +18,14 @@ api_key = "b94cd3922224f8eb48df6659b31b309b"
 units = "imperial"  # You can change to "metric" for Celsius
 
 # Amadeus Flight API
+client_id = "GQioBSxIU0TIjk8NoVQ15YHYtHsnP6IJ"
+client_secret = "kajo3AaR6WAYNA8q"
 amadeus_api_key = "GQioBSxIU0TIjk8NoVQ15YHYtHsnP6IJ"
 amadeus_api_secret = "kajo3AaR6WAYNA8q"
-access_token = "LomTNkuEcc01OoZ1hJaZdaCzheBf"
 base_url = "https://test.api.amadeus.com/v2"
-headers = {
-    "Authorization": f"Bearer {access_token}"
-}
+
+# Initialize the Amadeus client with your credentials
+amadeus = Client(client_id='YOUR_API_KEY', client_secret='YOUR_API_SECRET')
 
 # Initialize the Amadeus client
 amadeus = Client(client_id=amadeus_api_key, client_secret=amadeus_api_secret)
@@ -46,50 +52,27 @@ def get_flight_offers():
     destination_city = request.form.get('destinationCity')
     departure_date = request.form.get('departureDate')
     adults = request.form.get('adults')
-    print(f"{origin_city}, {destination_city}, {departure_date}, {adults}")
 
     if origin_city and destination_city and departure_date and adults:
-        try:
-            origin_code = get_airport_code(origin_city)
-            destination_code = get_airport_code(destination_city)
-            print(f"####### {origin_code} to {destination_code} #########")
+        origin_code = get_airport_code(origin_city)
+        destination_code = get_airport_code(destination_city)
 
-            if origin_code and destination_code:
-                amadeus_flight_offers_url = build_amadeus_flight_offers_url(origin_code, destination_code, departure_date, adults)
-                response = requests.get(amadeus_flight_offers_url, headers=headers)
-                
-                # Check the response
-                if response.status_code == 200:
-                    data = response.json()
-                    print(data)
-                else:
-                    print(f"Request failed with status code {response.status_code}: {response.text}")
-                
-                response_data = response.json()
-                return jsonify(response_data)
-            else:
-                return jsonify({'error': 'Origin or destination city not found'})
-        except Exception as e:
-            return jsonify({'error': str(e)})
+        if origin_code and destination_code:
+            response = amadeus.shopping.flight_offers_search.get(
+                originLocationCode=origin_code,
+                destinationLocationCode=destination_code,
+                departureDate=departure_date,
+                adults=int(adults)
+            )
+            print(f"RESPONSE: {response}")
+            response_data = response.data
+            data = json.dumps(response_data)
+            #print(f"DATA: {data}")
+            return data
+        else:
+            return jsonify({'error': 'Origin or destination city not found'})
     else:
         return jsonify({'error': 'Incomplete flight search criteria'})
-
-def build_amadeus_flight_offers_url(origin, destination, departure_date, adults):
-    base_url = "https://test.api.amadeus.com/v2/shopping/flight-offers"
-    params = {
-        'originLocationCode': origin,
-        'destinationLocationCode': destination,
-        'departureDate': departure_date,
-        'adults': adults,
-        'nonStop': True,  # Set to True or False based on your search criteria
-        'max': 250
-    }
-
-    print(f"INPUTS: {origin}, {destination}, {departure_date}, {adults}")
-    # Use `urlencode` to encode the query parameters
-    url = f"{base_url}?{urlencode(params)}"
-    print(f"Amadeus URL: {url}")
-    return url
 
 def get_airport_code(destination_city):
     with open(csv_file, mode="r", newline="") as file:
@@ -104,3 +87,17 @@ def get_airport_code(destination_city):
 if __name__ == '__main__':
     app.run(debug=True)
 
+# if origin_code and destination_code:
+            #     access_token = get_access_token()
+            #     amadeus_flight_offers_url = build_amadeus_flight_offers_url(
+            #         origin_code, destination_code, departure_date, adults)
+            #     print(f"TOTAL URL: {amadeus_flight_offers_url}")
+            #     header = {"Authorization": f"Bearer {access_token}"}
+            #     print(f"HEADER: {header}")
+            #     response = requests.get(amadeus_flight_offers_url, headers=header)
+            #     print(f"RESPONSE: {response}")
+            #     response_data = response.json()
+            #     print(f"RESPONSE DATA: {response_data}")
+            #     return jsonify(response_data)
+            # else:
+            #     return jsonify({'error': 'Origin or destination city not found'})

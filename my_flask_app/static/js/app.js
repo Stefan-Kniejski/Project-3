@@ -115,7 +115,7 @@ function createWeatherPopupContent(data) {
 }
 
 document.getElementById("flightOffersForm").addEventListener("submit", function (e) {
-    e.preventDefault(); // Prevent the form from submitting in the traditional way
+    e.preventDefault(); 
 
     const formData = new FormData(this);
 
@@ -135,15 +135,16 @@ document.getElementById("flightOffersForm").addEventListener("submit", function 
     });
 });
 
-// creates a list of flight offers with details
+
+/////////////////////////////////////////////////////////////////////////
 function displayFlightOffersData(data) {
     const flightOffersInfoDiv = document.getElementById("flightOffersInfo");
     flightOffersInfoDiv.innerHTML = ""; // Clear any previous data
 
-    if (data.data && data.data.length > 0) {
+    if (data.length > 0) {
         const flightList = document.createElement("ul");
 
-        data.data.forEach(flight => {
+        data.forEach(flight => {
             const flightItem = document.createElement("li");
             flightItem.innerHTML = `
                 <strong>Departure Location:</strong> ${flight.originLocationCode}<br>
@@ -162,5 +163,9 @@ function displayFlightOffersData(data) {
         flightOffersInfoDiv.textContent = "No flight offers found for the given criteria.";
     }
 }
+// Assuming that you have received the flight data as a JSON string
+const jsonData = `{{ flight_data | tojson }}`; // Replace flight_data with the actual variable name
 
-/////////////////////////////////////////////////////////////////////////
+// Parse the JSON data and call the display function
+const flightData = JSON.parse(jsonData);
+displayFlightOffersData(flightData);
