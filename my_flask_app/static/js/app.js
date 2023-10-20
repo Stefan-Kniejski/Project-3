@@ -98,7 +98,7 @@ document.getElementById("searchForm").addEventListener("submit", function (e) {
             displayWeather(data);
             displayMap(data.coord);
             logCoordinatesToConsole(data.coord); // Log the coordinates and assign them to variables
-            
+
         });
     }
     
@@ -122,6 +122,22 @@ document.getElementById("searchForm").addEventListener("submit", function (e) {
     });
 });
 
+// Function to format a date string in a user-friendly format
+function formatTime(timeString) {
+    const date = new Date(timeString);
+    return date.toLocaleString(); // You can customize the format further if needed
+}
+
+// Function to calculate and format the flight duration
+function calculateFlightDuration(departureTime, arrivalTime) {
+    const departure = new Date(departureTime);
+    const arrival = new Date(arrivalTime);
+    const durationMilliseconds = arrival - departure;
+    const hours = Math.floor(durationMilliseconds / 3600000);
+    const minutes = Math.round((durationMilliseconds % 3600000) / 60000);
+    return `${hours}h ${minutes}m`;
+}
+
 // Function to display flight offer data
 function displayFlightOffersData(data) {
     // Get the element where you want to display the flight offers
@@ -130,21 +146,22 @@ function displayFlightOffersData(data) {
     // Clear any previous data
     flightOffersList.innerHTML = "";
 
-    // Check if data is an array and not empty
+    // Check if data is an array and not empty and prints
     if (Array.isArray(data) && data.length > 0) {
         data.forEach(flight => {
             const flightItem = document.createElement("li");
             flightItem.innerHTML = `
-                <strong>Flight Type:</strong> ${flight.type}<br>
-                <strong>Flight ID:</strong> ${flight.id}<br>
-                <strong>Source:</strong> ${flight.source}<br>
-                <strong>Instant Ticketing Required:</strong> ${flight.instantTicketingRequired}<br>
-                <strong>Non-Homogeneous:</strong> ${flight.nonHomogeneous}<br>
-                <strong>One Way:</strong> ${flight.oneWay}<br>
-                <strong>Last Ticketing Date:</strong> ${flight.lastTicketingDate}<br>
-                <strong>Last Ticketing Date Time:</strong> ${flight.lastTicketingDateTime}<br>
-                <strong>Number of Bookable Seats:</strong> ${flight.numberOfBookableSeats}<br>
-                <!-- Add more flight details here -->
+            <strong>Instant Ticketing Required:</strong> ${flight.instantTicketingRequired}<br>
+            <strong>Last Ticketing Date:</strong> ${flight.lastTicketingDate}<br>
+            <strong>Last Ticketing Date Time:</strong> ${flight.lastTicketingDateTime}<br>
+            <strong>Number of Bookable Seats:</strong> ${flight.numberOfBookableSeats}<br>
+            <strong>Flight Duration:</strong> ${calculateFlightDuration(flight.itineraries[0].segments[0].departure.at, flight.itineraries[0].segments[1].arrival.at)}<br>
+            <strong>Departure Time:</strong> ${formatTime(flight.itineraries[0].segments[0].departure.at)}<br>
+            <strong>Arrival Time:</strong> ${formatTime(flight.itineraries[0].segments[1].arrival.at)}<br>
+            <strong>Pricing:</strong> ${flight.price.total} ${flight.price.currency}<br>
+            <strong>Carrier Information:</strong> ${flight.itineraries[0].segments[0].carrierCode} Flight ${flight.itineraries[0].segments[0].number} (${flight.itineraries[0].segments[0].aircraft.code})<br>
+            <strong>Number of Stops:</strong> ${flight.itineraries[0].segments.length - 1}<br>
+            <strong>Fare Details:</strong> Cabin: ${flight.travelerPricings[0].fareDetailsBySegment[0].cabin}, Class: ${flight.travelerPricings[0].fareDetailsBySegment[0].class}<br>
             `;
             flightOffersList.appendChild(flightItem);
         });
@@ -152,4 +169,3 @@ function displayFlightOffersData(data) {
         flightOffersList.textContent = "No flight offers found for the given criteria.";
     }
 }
-
