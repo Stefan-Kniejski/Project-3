@@ -88,7 +88,7 @@ def get_airport_code(destination_city):
     with open(csv_file, mode="r", newline="") as file:
         reader = csv.DictReader(file)
         for row in reader:
-            if row["City"].lower() == destination_city.lower():
+            if row["City"].lower() == destination_city.lower().replace(" ", ""):
                 code = row["Code"]
                 return code
     

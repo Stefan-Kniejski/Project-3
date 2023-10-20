@@ -6,21 +6,6 @@ let units = "imperial"; // You can change to "metric" for Celsius
 let map = L.map('map').setView([0, 0], 1);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-// Listen for the button click event
-d3.select("#submit").on("click", function () {
-    // Get the city from the input field
-    let city = d3.select("#destination").property("value");
-    if (city) {
-        // Create the OpenWeatherMap API URL
-        let openWeatherMapUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=${units}`;
-        // Fetch weather data and display it
-        d3.json(openWeatherMapUrl).then(data => {
-            displayWeather(data);
-            displayMap(data.coord);
-        });
-    }
-});
-
 // Declare a variable to store the destination city
 let destinationCity;
 
@@ -50,30 +35,11 @@ function displayWeather(data) {
             .append("p")
             .text("Weather data not found.");
     }
-    console.log(`Destination City: ${destinationCity}`);
-}
-
-// Function to log coordinates to the console and assign them to variables
-function logCoordinatesToConsole(coord) {
-    latitude = coord.lat;
-    longitude = coord.lon;
-    console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
 }
 
 // Listen for the button click event
 d3.select("#submit").on("click", function () {
-    // Get the city from the input field
-    let city = d3.select("#destination").property("value");
-    if (city) {
-        // Create the OpenWeatherMap API URL
-        let openWeatherMapUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=${units}`;
-        // Fetch weather data and display it
-        d3.json(openWeatherMapUrl).then(data => {
-            displayWeather(data);
-            displayMap(data.coord);
-            logCoordinatesToConsole(data.coord); // Log the coordinates and assign them to variables
-        });
-    }
+    
 });
 
 // Function to display the map
@@ -119,8 +85,22 @@ function createWeatherPopupContent(data) {
 }
 
 // Add an event listener for the flight offers form
-document.getElementById("flightOffersForm").addEventListener("submit", function (e) {
+document.getElementById("searchForm").addEventListener("submit", function (e) {
     e.preventDefault(); // Prevent the form from submitting
+    // Get the city from the input field
+    let city = d3.select("#destinationCity").property("value");
+    console.log(city);
+    if (city) {
+        // Create the OpenWeatherMap API URL
+        let openWeatherMapUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=${units}`;
+        // Fetch weather data and display it
+        d3.json(openWeatherMapUrl).then(data => {
+            displayWeather(data);
+            displayMap(data.coord);
+            logCoordinatesToConsole(data.coord); // Log the coordinates and assign them to variables
+            
+        });
+    }
     
     // Get the form data
     const formData = new FormData(this);
