@@ -1,6 +1,5 @@
-// <script src="./static/js/app.js"></script> 
-
-let apiKey = "b94cd3922224f8eb48df6659b31b309b";   
+// Set your API key and units
+let apiKey = "b94cd3922224f8eb48df6659b31b309b";
 let units = "imperial"; // You can change to "metric" for Celsius
 
 // Initialize the map
@@ -9,9 +8,12 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
 // Listen for the button click event
 d3.select("#submit").on("click", function () {
+    // Get the city from the input field
     let city = d3.select("#destination").property("value");
     if (city) {
+        // Create the OpenWeatherMap API URL
         let openWeatherMapUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=${units}`;
+        // Fetch weather data and display it
         d3.json(openWeatherMapUrl).then(data => {
             displayWeather(data);
             displayMap(data.coord);
@@ -29,18 +31,17 @@ function displayWeather(data) {
     destinationCity = data.name;
 
     if (data.main && data.weather) {
+        // Extract and display temperature and description
         let temperature = data.main.temp;
         let description = data.weather[0].description;
-
+        
         // Create HTML elements to display weather information
         weatherInfo
             .append("p")
             .text(`City: ${data.name}`);
-
         weatherInfo
             .append("p")
             .text(`Temperature: ${temperature} °F`);
-
         weatherInfo
             .append("p")
             .text(`Description: ${description}`);
@@ -61,9 +62,12 @@ function logCoordinatesToConsole(coord) {
 
 // Listen for the button click event
 d3.select("#submit").on("click", function () {
+    // Get the city from the input field
     let city = d3.select("#destination").property("value");
     if (city) {
+        // Create the OpenWeatherMap API URL
         let openWeatherMapUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=${units}`;
+        // Fetch weather data and display it
         d3.json(openWeatherMapUrl).then(data => {
             displayWeather(data);
             displayMap(data.coord);
@@ -71,7 +75,6 @@ d3.select("#submit").on("click", function () {
         });
     }
 });
-
 
 // Function to display the map
 function displayMap(coord) {
@@ -84,7 +87,7 @@ function displayMap(coord) {
         if (data) {
             // Print the data to the console
             console.log(data);
-
+            
             // Create and set the popup with additional weather information
             marker.bindPopup(createWeatherPopupContent(data));
         }
@@ -94,6 +97,7 @@ function displayMap(coord) {
 // Function to create the content for the weather popup
 function createWeatherPopupContent(data) {
     if (data.main && data.weather) {
+        // Extract and display additional weather information
         let feelsLike = data.main.feels_like;
         let humidity = data.main.humidity;
         let pressure = data.main.pressure;
@@ -114,11 +118,14 @@ function createWeatherPopupContent(data) {
     }
 }
 
+// Add an event listener for the flight offers form
 document.getElementById("flightOffersForm").addEventListener("submit", function (e) {
-    e.preventDefault(); 
-
+    e.preventDefault(); // Prevent the form from submitting
+    
+    // Get the form data
     const formData = new FormData(this);
 
+    // Send a POST request to the server to get flight offers
     fetch("/get_flight_offers", {
         method: 'POST',
         body: formData,
@@ -135,16 +142,15 @@ document.getElementById("flightOffersForm").addEventListener("submit", function 
     });
 });
 
-
-/////////////////////////////////////////////////////////////////////////
-// Get the element where you want to display the flight offers
-const flightOffersList = document.getElementById("flightOffersList");
-
 // Function to display flight offer data
 function displayFlightOffersData(data) {
+    // Get the element where you want to display the flight offers
+    const flightOffersList = document.getElementById("flightOffersList");
+
     // Clear any previous data
     flightOffersList.innerHTML = "";
 
+    // Check if data is an array and not empty
     if (Array.isArray(data) && data.length > 0) {
         data.forEach(flight => {
             const flightItem = document.createElement("li");
@@ -166,3 +172,4 @@ function displayFlightOffersData(data) {
         flightOffersList.textContent = "No flight offers found for the given criteria.";
     }
 }
+

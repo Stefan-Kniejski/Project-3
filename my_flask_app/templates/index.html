@@ -11,15 +11,19 @@
 </head>
 <body>
   <h1>Weather App</h1>
+
+  <!-- Input and button for weather information -->
   <label for="destination">Enter Destination City:</label>
   <input type="text" id="destination" placeholder="E.g., San Antonio">
   <button id="submit">Get Weather</button>
-  
+
   <br>
+
+  <!-- Containers for weather information and map -->
   <div id="weather-info"></div>
   <div id="map" style="width: 400px; height: 400px;"></div>
-  <div id="map"></div>
-  
+
+  <!-- Form for flight offers search -->
   <form id="flightOffersForm" method="POST">
     <label for="departureCity">Departure City:</label>
     <input type="text" id="departureCity" name="departureCity" placeholder="E.g., New York" required>
@@ -35,13 +39,17 @@
 
     <button type="submit">Search Flights</button>
   </form>
-  
+
+  <!-- Container for displaying flight offers -->
   <ul id="flightOffersList"></ul>
 
+  <!-- Include required JavaScript libraries -->
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-  <script src="./static/js/app.js"></script>
 
+  <!-- Include your custom JavaScript for app functionality -->
+  <script src="./static/js/app.js"></script>
 </body>
 </html>
+
 
