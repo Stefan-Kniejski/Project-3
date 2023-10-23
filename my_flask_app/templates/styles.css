@@ -1,0 +1,33 @@
+.map-and-charts {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.map-container, .chart-container {
+    flex: 1;
+    margin: 5px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+}
+
+canvas {
+    max-width: 100%;
+    height: auto;
+}
+
+.chart-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin-top: -180px; /* Adjust the margin-top to raise the chart container */
+}
+
+canvas {
+    max-width: 100%;
+    height: auto;
+}
