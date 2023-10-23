@@ -1,53 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Weather Dashboard</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <link rel="stylesheet" href="https://openweathermap.org/themes/openweathermap/assets/vendor/owm/css/owm_3.1.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Travel Dashboard</title>
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+  />
 </head>
+
 <body>
-    <h1>Weather Dashboard</h1>
+  <h1>Travel Dashboard</h1>
 
-    <!-- Container for the city input and button -->
-    <div id="city-input-container">
-        <label for "city-input">Enter a City:</label>
-        <input type="text" id="city-input" placeholder="Type a city name and press 'Show Weather'">
-        <button id="show-weather-button">Show Weather</button>
+  <!-- Form for flight offers search -->
+  <form id="searchForm" method="POST">
+    <label for="departureCity">Departure City:</label>
+    <input type="text" id="departureCity" name="departureCity" placeholder="E.g., New York" required>
+
+    <label for "destinationCity">Destination City:</label>
+    <input type="text" id="destinationCity" name="destinationCity" placeholder="E.g., Los Angeles" required>
+
+    <label for="departureDate">Departure Date:</label>
+    <input type="date" id="departureDate" name="departureDate" required>
+
+    <label for="adults">Number of Adults:</label>
+    <input type="number" id="adults" name="adults" min="1" max="9" required>
+
+    <button id="submit" type="submit">Search Location</button>
+  </form>
+
+  <br>
+
+  <!-- Containers for weather information and map -->
+  <div id="weather-info"></div>
+  <div id="map" style="width: 400px; height: 400px;"></div>
+
+  <!-- Container for displaying flight offers -->
+  <ul id="flightOffersList"></ul>
+
+  <!-- Container for displaying flight offers in a table -->
+  <div id="flightOffersTable"></div>
+
+  <div id="chart-container">
+    <h2>Temperature Forecast</h2>
+    <div class="chart-wrapper">
+      <canvas id="high-temperature-chart" width="400" height="200"></canvas>
+      <canvas id="low-temperature-chart" width="400" height="200"></canvas>
+      <canvas id="temperature-chart-celsius" width="400" height="200"></canvas>
+      <canvas id="temperature-chart-fahrenheit" width="400" height="200"></canvas>
     </div>
+  </div>
 
-    <!-- Container for the map -->
-    <div id="map" style="width: 75%; height: 400px;"></div>
+  <!-- Include required JavaScript libraries -->
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <!-- Container for temperature and weather information -->
-    <div id="weather-info-container">
-        <h2>Current Weather</h2>
-        <p>Temperature (Celsius / Fahrenheit): <span id="temperature-celsius"></span>°C / <span id="temperature-fahrenheit"></span>°F</p>
-        <p>Humidity: <span id="humidity"></span></p>
-        <p>Precipitation: <span id="precipitation"></span></p>
-        <p>Cloudiness: <span id="cloudiness"></span></p>
-        <p>Wind Speed: <span id="wind-speed"></span></p>
-    </div>
-
-    <!-- Container for the bar charts -->
-    <div id="chart-container">
-        <h2>Temperature Forecast</h2>
-        <div class="chart-wrapper">
-            <canvas id="high-temperature-chart" width="400" height="200"></canvas>
-            <canvas id="low-temperature-chart" width="400" height="200"></canvas>
-            <canvas id="temperature-chart-celsius" width="400" height="200"></canvas>
-            <canvas id="temperature-chart-fahrenheit" width="400" height="200"></canvas>
-        </div>
-    </div>
-    
-
-    </div>
-
-    <!-- Load Leaflet library from a known CDN -->
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script src="app.js"></script>
+  <script src="./static/js/app.js"></script>
 </body>
 </html>
