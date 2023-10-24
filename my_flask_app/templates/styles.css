@@ -31,3 +31,34 @@ canvas {
     max-width: 100%;
     height: auto;
 }
+
+.flight-offers-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+.flight-offers-table th,
+.flight-offers-table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+}
+
+.flight-offers-table th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+}
+
+.flight-offers-table td {
+    background-color: #f9f9f9;
+}
+
+.flight-offers-table tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+.flight-offers-table tr:hover {
+    background-color: #c0c0c0;
+}
+}
