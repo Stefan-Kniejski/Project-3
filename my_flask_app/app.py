@@ -12,7 +12,7 @@ import csv
 # Import the API keys from a config file
 from config import amadeus_api_key, amadeus_api_secret, weather_api_key
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static')
 
 # Define the path to the CSV file containing city codes
 csv_file = "../Resources/cityToCode.csv"

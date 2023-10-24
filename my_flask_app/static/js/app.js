@@ -298,6 +298,7 @@ function createWeatherPopupContent(data) {
 }
 
 // Function to display the flight offers in a table
+<<<<<<< HEAD
 // Function to display the flight offers in a table
 function displayFlightOffersData(data) {
     const flightOffersTable = document.getElementById("flightOffersTable");
@@ -307,12 +308,28 @@ function displayFlightOffersData(data) {
         const validFlightOffers = data.filter(flight => flight.itineraries && flight.itineraries[0] && flight.itineraries[0].segments && flight.itineraries[0].segments[0] && flight.itineraries[0].segments[1]);
         // Sort flight offers by duration in ascending order
         validFlightOffers.sort((a, b) => {
+=======
+function displayFlightOffersData(data) {
+    const flightOffersTable = document.getElementById("flightOffersTable");
+    flightOffersTable.innerHTML = ""; // Clear previous data
+
+    if (Array.isArray(data) && data.length > 0) {
+        // Sort flight offers by duration in ascending order
+        data.sort((a, b) => {
+>>>>>>> 15b2f7c396899bc17ea13cd71aa9bdab780ef81d
             const durationA = calculateFlightDuration(a.itineraries[0].segments[0].departure.at, a.itineraries[0].segments[1].arrival.at);
             const durationB = calculateFlightDuration(b.itineraries[0].segments[0].departure.at, b.itineraries[0].segments[1].arrival.at);
             return durationA.localeCompare(durationB);
         });
+<<<<<<< HEAD
         const table = document.createElement("table");
         table.classList.add("flight-offers-table");
+=======
+
+        const table = document.createElement("table");
+        table.classList.add("flight-offers-table");
+
+>>>>>>> 15b2f7c396899bc17ea13cd71aa9bdab780ef81d
         const headerRow = table.insertRow();
         headerRow.innerHTML = `
             <th>Duration</th>
@@ -322,11 +339,22 @@ function displayFlightOffersData(data) {
             <th>Carrier Information</th>
             <th>Number of Stops</th>
         `;
+<<<<<<< HEAD
         for (let i = 0; i < Math.min(validFlightOffers.length, 10); i++) {
             const flight = validFlightOffers[i];
             const row = table.insertRow();
             const eurToUsdExchangeRate = 1.18; // Replace with the actual exchange rate
             const pricingInUSD = flight.price.total * eurToUsdExchangeRate;
+=======
+
+        for (let i = 0; i < Math.min(data.length, 10); i++) {
+            const flight = data[i];
+            const row = table.insertRow();
+
+            const eurToUsdExchangeRate = 1.18; // Replace with the actual exchange rate
+            const pricingInUSD = flight.price.total * eurToUsdExchangeRate;
+
+>>>>>>> 15b2f7c396899bc17ea13cd71aa9bdab780ef81d
             row.innerHTML = `
                 <td>${calculateFlightDuration(flight.itineraries[0].segments[0].departure.at, flight.itineraries[0].segments[1].arrival.at)}</td>
                 <td>${formatTime(flight.itineraries[0].segments[0].departure.at)}</td>
@@ -336,6 +364,10 @@ function displayFlightOffersData(data) {
                 <td>${flight.itineraries[0].segments.length - 1}</td>
             `;
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 15b2f7c396899bc17ea13cd71aa9bdab780ef81d
         flightOffersTable.appendChild(table);
     } else {
         flightOffersTable.textContent = "No flight offers found for the given criteria.";
@@ -392,4 +424,8 @@ function calculateFlightDuration(departureTime, arrivalTime) {
 function logCoordinatesToConsole(coord) {
     console.log("Latitude:", coord.lat);
     console.log("Longitude:", coord.lon);
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 15b2f7c396899bc17ea13cd71aa9bdab780ef81d
