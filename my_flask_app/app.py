@@ -12,7 +12,11 @@ import csv
 # Import the API keys from a config file
 from config import amadeus_api_key, amadeus_api_secret, weather_api_key
 
+<<<<<<< HEAD
 app = Flask(__name__, static_url_path='/static')
+=======
+app = Flask(__name__)
+>>>>>>> 7a2f6a4fa18526aa7ac50d079bc8667db9bedc24
 
 # Define the path to the CSV file containing city codes
 csv_file = "../Resources/cityToCode.csv"
@@ -97,4 +101,8 @@ def get_airport_code(destination_city):
     return None
 
 if __name__ == '__main__':
+<<<<<<< HEAD
     app.run(debug=True)
+=======
+    app.run(debug=True)
+>>>>>>> 7a2f6a4fa18526aa7ac50d079bc8667db9bedc24
