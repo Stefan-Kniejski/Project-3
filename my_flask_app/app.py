@@ -5,6 +5,8 @@
 
 from flask import Flask, render_template, request, jsonify
 from amadeus import Client
+# *import sqlalchemy
+from flask_sqlalchemy import SQLAlchemy 
 import requests
 import json
 import csv
@@ -12,7 +14,22 @@ import csv
 # Import the API keys from a config file
 from config import amadeus_api_key, amadeus_api_secret, weather_api_key
 
+<<<<<<< Updated upstream
 app = Flask(__name__, static_url_path='/static')
+=======
+app = Flask(__name__)
+# *debut true; add in weather database
+app.config['DEBUG'] = True
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///Resources/weather.db'
+
+# *define db on sqlalchemy
+db = SQLAlchemy(app)
+
+# *define class
+class City(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+>>>>>>> Stashed changes
 
 # Define the path to the CSV file containing city codes
 csv_file = "../Resources/cityToCode.csv"
@@ -26,11 +43,42 @@ base_url = "https://test.api.amadeus.com/v2"
 # Initialize the Amadeus client using API keys
 amadeus = Client(client_id=amadeus_api_key, client_secret=amadeus_api_secret)
 
-@app.route('/')
+#@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    # Render the HTML template for the main page
-    return render_template('index.html')
+    # *define get/post sequences start
+    if request.method == 'POST':
+        new_city = request.form.get('city')
+        
+        if new_city:
+            new_city_obj = City(name=new_city)
 
+            db.session.add(new_city_obj)
+            db.session.commit()
+
+    cities = City.query.all()
+
+    url = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=imperial&appid=b94cd3922224f8eb48df6659b31b309b'
+    
+    weather_data = []
+
+    for city in cities:
+
+        r = requests.get(url.format(city.name)).json()
+
+        weather = {
+            'city' : city.name,
+            'temperature' : r['main']['temp'],
+            'description' : r['weather'][0]['description'],
+            'icon' : r['weather'][0]['icon'],
+        }
+
+        weather_data.append(weather)
+        # *define get/post sequences end
+
+    # Render the HTML template for the main page and *adding in weather_data
+    return render_template('index.html', weather_data=weather_data)
+    
 @app.route('/get_weather', methods=['POST'])
 def get_weather():
     city = request.form.get('city')
