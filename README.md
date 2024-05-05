@@ -1,35 +1,38 @@
 # Project-3
-Before running the Project make sure to:
 
-pip install amadeus
-pip install sdk
+## Project Disctription 
+Our weather and travel app is a comprehensive tool for seamless journey planning. Users input departure and destination locations, generating an interactive map of their route, alongside up-to-date weather forecasts for their arrival week and access to the latest flight offers. This integration of location mapping, weather information, and flight options simplifies travel planning, ensuring users can make informed decisions and book their trips effortlessly, making it the ultimate companion for hassle-free travel.
 
+## Installation
+* pip install amadeus
+* pip install sdk
 
 Working Project is found in "my_flask_app"
-
-
 To run the app run the project code:
-python app.py
+* python app.py
 
-Requirements
-Data and Delivery (25 points)
-Data components used in the project are clearly documented. (5 points)
-The dataset contains at least 100 unique records. (5 points)
-A database is used to house the data (SQL, MongoDB, SQLite, etc.). (5 points)
-The project is powered by a Python Flask API and includes HTML/CSS, JavaScript, and the chosen database. (10 points)
-Back End (25 points)
-The page created to showcase data visualizations runs without error. (7.5 points)
-A JavaScript library not shown in class is used in the project. (7.5 points)
-The project conforms to one of the following designs: (10 points)
-A Leaflet or Plotly chart built from data gathered through web scraping.
-A dashboard page with multiple charts that all reference the same data.
-Visualizations (25 points)
-A minimum of three unique views present the data. (5 points)
-Multiple user-driven interactions (such as dropdowns, filters, or a zoom feature) are included on the final page. (5 points)
-The final page displays visualizations in a clear, digestable manner. (5 points)
-The data story is easy to interpret for users of all levels. (10 points)
-Group Presentation (25 points)
-All group members speak during the presentation. (5 points)
-The content is relevant to the project. (5 points)
-The presentation maintains audience interest. (5 points)
-Content, transitions, and conclusions flow smoothly within any time restrictions. (10 points)
+## Requirements
+### Data and Delivery (25 points)
+* Data Documentation: Data components used in the project are thoroughly documented.
+* Dataset Size: The dataset contains a minimum of 100 unique records.
+* Database Usage: Data is stored in a database (e.g., SQL, MongoDB, SQLite).
+* Technology Stack: The project utilizes a Python Flask API along with HTML/CSS, JavaScript, and the chosen database.
+* 
+### Back End (25 points)
+* Visualization Page: The page showcasing data visualizations functions without errors.
+* Advanced JavaScript Usage: A JavaScript library not covered in the course is integrated into the project.
+* Design Conformity: The project adheres to one of the specified design requirements:
+* Leaflet or Plotly charts sourced from web-scraped data.
+* Dashboard page featuring multiple charts referencing the same data.
+
+### Visualizations (25 points)
+* Diverse Views: A minimum of three unique views are presented for the data.
+* User Interaction: Multiple user-driven interactions (e.g., dropdowns, filters, zoom) are incorporated into the final page.
+* Visual Clarity: Visualizations are presented clearly and in an easily digestible manner.
+* User Interpretation: The data story is comprehensible for users of varying expertise levels.
+
+### Group Presentation (25 points)
+* Participation: All group members actively contribute to the presentation.
+* Relevance: The content presented is directly related to the project.
+* Engagement: The presentation effectively maintains audience interest.
+* Flow: Content, transitions, and conclusions seamlessly align within any time constraints.
