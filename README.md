@@ -4,6 +4,10 @@
 Our weather and travel app is a comprehensive tool for seamless journey planning. Users input departure and destination locations, generating an interactive map of their route, alongside up-to-date weather forecasts for their arrival week and access to the latest flight offers. This integration of location mapping, weather information, and flight options simplifies travel planning, ensuring users can make informed decisions and book their trips effortlessly, making it the ultimate companion for hassle-free travel.
 
 ![App's main page with flights going from San Antonio TX to New York City](presentation/screenshots/appface.png)
+![Map details for San Antonio Destination](presentation/screenshots/mapdetails.png)
+![Fligt destination details](presentation/screenshots/flightdestinations.png)
+![App's main page with weather forecasts](presentation/screenshots/forcast.png)
+
 
 ## Installation
 * pip install amadeus
