@@ -1,11 +1,18 @@
-# Project-3
+# Weather & Travel App — Project-3
 
 ## Project Disctription 
-Our weather and travel app is a comprehensive tool for seamless journey planning. Users input departure and destination locations, generating an interactive map of their route, alongside up-to-date weather forecasts for their arrival week and access to the latest flight offers. This integration of location mapping, weather information, and flight options simplifies travel planning, ensuring users can make informed decisions and book their trips effortlessly, making it the ultimate companion for hassle-free travel.
+Our Weather and Travel App is an all-in-one travel planning tool designed to make your journey seamless and hassle-free. Users enter their departure and destination locations to generate:
 
-![App's main page with flights going from San Antonio TX to New York City](presentation/screenshots/appface.png)
-![App's main page with map details](presentation/screenshots/mapdetails(NYC).png)
-![App's main page with weather forecasts](presentation/screenshots/forcast.png)
+* An interactive map outlining their travel route
+* Up-to-date weather forecasts for the arrival week
+* The latest flight offers tailored to their trip
+
+By integrating location mapping, weather insights, and flight options, the app empowers travelers to make informed decisions and book trips effortlessly — the perfect companion for smart, stress-free travel.
+
+![App's main page with flights going from San Antonio TX to New York City](presentation/screenshots/appOverview.png)
+Main page showing flight routes
+![App's main page with map and weather](presentation/screenshots/weatherOverview.png)
+Interactive route map with location details and Weekly weather forecast for destination
 
 
 ## Installation
