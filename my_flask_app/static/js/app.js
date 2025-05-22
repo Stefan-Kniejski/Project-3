@@ -37,96 +37,98 @@ function displayWeather(data) {
     }
 }
 
-// Function to create the bar chart for Fahrenheit
-function createBarChart(chartID, labels, fahrenheitHighData, fahrenheitLowData, yAxisLabel, title) {
-    const ctx = document.getElementById(chartID).getContext('2d');
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: labels,
-            datasets: [
-                {
-                    label: 'High Temperature (°F)',
-                    data: fahrenheitHighData,
-                    backgroundColor: 'rgba(255, 0, 0, 0.5)', // Red for high temperature
-                    borderColor: 'rgba(255, 0, 0, 1)',
-                    borderWidth: 1,
-                },
-                {
-                    label: 'Low Temperature (°F)',
-                    data: fahrenheitLowData,
-                    backgroundColor: 'rgba(0, 0, 255, 0.5)', // Blue for low temperature
-                    borderColor: 'rgba(0, 0, 255, 1)',
-                    borderWidth: 1,
-                },
-            ],
+let currentUnit = 'F';
+let tempChart = null;
+
+function createUnifiedBarChart(labels, highTemps, lowTemps, unit) {
+  const ctx = document.getElementById("temperature-chart").getContext("2d");
+
+  // Destroy previous chart if it exists
+  if (tempChart) {
+    tempChart.destroy();
+  }
+
+  tempChart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: `High Temp (°${unit})`,
+          data: highTemps,
+          backgroundColor: "rgba(255, 99, 132, 0.5)",
+          borderColor: "rgba(255, 99, 132, 1)",
+          borderWidth: 1,
         },
-        options: {
-            layout: {
-                padding: {
-                    top: 0, // Reduce the top padding to minimize the gap
-                },
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: yAxisLabel,
-                    },
-                },
-                x: {
-                    title: {
-                        display: true,
-                        text: 'Date',
-                    },
-                },
-            },
-            plugins: {
-                title: {
-                    display: true,
-                    text: title,
-                },
-            },
+        {
+          label: `Low Temp (°${unit})`,
+          data: lowTemps,
+          backgroundColor: "rgba(54, 162, 235, 0.5)",
+          borderColor: "rgba(54, 162, 235, 1)",
+          borderWidth: 1,
         },
+      ],
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: false,
+          title: {
+            display: true,
+            text: `Temperature (°${unit})`,
+          },
+        },
+        x: {
+          title: {
+            display: true,
+            text: "Date",
+          },
+        },
+      },
+      plugins: {
+        title: {
+          display: true,
+          text: `5-Day Temperature Forecast (${unit})`,
+        },
+      },
+    },
+  });
+}
+
+function fetchTemperatureForecast(city, unit = 'imperial') {
+  return fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=${unit}`)
+    .then(res => res.json())
+    .then(data => {
+      const dailyTemps = {};
+      data.list.forEach(item => {
+        const date = new Date(item.dt * 1000).toDateString();
+        if (!dailyTemps[date]) {
+          dailyTemps[date] = { high: -Infinity, low: Infinity };
+        }
+        dailyTemps[date].high = Math.max(dailyTemps[date].high, item.main.temp_max);
+        dailyTemps[date].low = Math.min(dailyTemps[date].low, item.main.temp_min);
+      });
+
+      const labels = Object.keys(dailyTemps);
+      const highTemps = labels.map(date => dailyTemps[date].high);
+      const lowTemps = labels.map(date => dailyTemps[date].low);
+      return { labels, highTemps, lowTemps };
     });
 }
 
-// Function to fetch temperature forecast data in Fahrenheit
-function fetchTemperatureForecastInFahrenheit(city) {
-    const apiUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=imperial`;
+function updateTemperatureChart(city) {
+  const unit = currentUnit === 'F' ? 'imperial' : 'metric';
+  fetchTemperatureForecast(city, unit)
+    .then(({ labels, highTemps, lowTemps }) => {
+      createUnifiedBarChart(labels, highTemps, lowTemps, currentUnit);
+    })
+    .catch(console.error);
+}
 
-    return fetch(apiUrl)
-        .then((response) => response.json())
-        .then((data) => {
-            // Process the data to extract temperature and time information
-            const temperatureData = data.list.map((item) => ({
-                time: new Date(item.dt * 1000), // Convert timestamp to Date
-                high: item.main.temp_max,
-                low: item.main.temp_min,
-            }));
-
-            // Group the data by date and calculate the daily high and low temperatures
-            const groupedData = {};
-            temperatureData.forEach((item) => {
-                const dateStr = item.time.toDateString();
-                if (!groupedData[dateStr]) {
-                    groupedData[dateStr] = { high: -Infinity, low: Infinity };
-                }
-                if (item.high > groupedData[dateStr].high) {
-                    groupedData[dateStr].high = item.high;
-                }
-                if (item.low < groupedData[dateStr].low) {
-                    groupedData[dateStr].low = item.low;
-                }
-            });
-
-            const labels = Object.keys(groupedData);
-            const fahrenheitHighTemperatures = labels.map((date) => groupedData[date].high);
-            const fahrenheitLowTemperatures = labels.map((date) => groupedData[date].low);
-
-            return { labels, fahrenheitHighTemperatures, fahrenheitLowTemperatures };
-        });
+// Call this function when you get weather data
+function fetchAndDisplayTemperatureForecast(cityName) {
+  updateTemperatureChart(cityName);
 }
 
 // Function to display the temperature forecast bar chart in Fahrenheit
@@ -138,74 +140,6 @@ function displayTemperatureForecast(city) {
         .catch((error) => {
             console.error("Error fetching temperature forecast data (Fahrenheit):", error);
         });
-}
-
-// Function to call the function to display the Celsius chart
-function fetchAndDisplayTemperatureForecast(city) {
-    fetchTemperatureForecastInFahrenheit(city)
-        .then(() => {
-            // Ensure the temperature forecast data has been successfully fetched
-            displayTemperatureForecast(city);
-            displayTemperatureForecastInCelsius(city); // Call this function to display the Celsius chart
-        })
-        .catch((error) => {
-            console.error("Error fetching temperature forecast data:", error);
-        });
-}
-
-// Function to create the bar chart for Celsius
-function createCelsiusBarChart(chartID, labels, celsiusHighData, celsiusLowData, yAxisLabel, title) {
-    const ctx = document.getElementById(chartID).getContext('2d');
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: labels,
-            datasets: [
-                {
-                    label: 'High Temperature (°C)',
-                    data: celsiusHighData,
-                    backgroundColor: 'rgba(255, 0, 0, 0.5)', // Red for high temperature
-                    borderColor: 'rgba(255, 0, 0, 1)',
-                    borderWidth: 1,
-                },
-                {
-                    label: 'Low Temperature (°C)',
-                    data: celsiusLowData,
-                    backgroundColor: 'rgba(0, 0, 255, 0.5)', // Blue for low temperature
-                    borderColor: 'rgba(0, 0, 255, 1)',
-                    borderWidth: 1,
-                },
-            ],
-        },
-        options: {
-            layout: {
-                padding: {
-                    top: 0, // Reduce the top padding to minimize the gap
-                },
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: yAxisLabel,
-                    },
-                },
-                x: {
-                    title: {
-                        display: true,
-                        text: 'Date',
-                    },
-                },
-            },
-            plugins: {
-                title: {
-                    display: true,
-                    text: title,
-                },
-            },
-        },
-    });
 }
 
 // Function to fetch temperature forecast data in Celsius
@@ -242,17 +176,6 @@ function fetchTemperatureForecastInCelsius(city) {
             const celsiusLowTemperatures = labels.map((date) => groupedData[date].low);
 
             return { labels, celsiusHighTemperatures, celsiusLowTemperatures };
-        });
-}
-
-// Function to display the temperature forecast bar chart in Celsius
-function displayTemperatureForecastInCelsius(city) {
-    fetchTemperatureForecastInCelsius(city)
-        .then(({ labels, celsiusHighTemperatures, celsiusLowTemperatures }) => {
-            createCelsiusBarChart("temperature-chart-celsius", labels, celsiusHighTemperatures, celsiusLowTemperatures, "Temperature (°C)", "Temperature Forecast (Celsius)");
-        })
-        .catch((error) => {
-            console.error("Error fetching temperature forecast data (Celsius):", error);
         });
 }
 
@@ -297,7 +220,6 @@ function createWeatherPopupContent(data) {
     }
 }
 
-// Function to display the flight offers in a table
 // Function to display the flight offers in a table
 function displayFlightOffersData(data) {
     const flightOffersTable = document.getElementById("flightOffersTable");
@@ -424,4 +346,11 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
   });
+});
+
+document.getElementById("unit-select").addEventListener("change", function () {
+  currentUnit = this.value;
+  if (destinationCity) {
+    updateTemperatureChart(destinationCity);
+  }
 });

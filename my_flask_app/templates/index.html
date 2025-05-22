@@ -42,15 +42,16 @@
   <!-- Container for displaying flight offers in a table -->
   <div id="flightOffersTable"></div>
 
-  <div id="chart-container">
-    <h2>Temperature Forecast</h2>
-    <div class="chart-wrapper">
-      <canvas id="high-temperature-chart" width="400" height="200"></canvas>
-      <canvas id="low-temperature-chart" width="400" height="200"></canvas>
-      <canvas id="temperature-chart-celsius" width="400" height="200"></canvas>
-      <canvas id="temperature-chart-fahrenheit" width="400" height="200"></canvas>
-    </div>
-  </div>
+<div id="chart-container">
+  <h2>Temperature Forecast</h2>
+  <label for="unit-select">Choose unit:</label>
+  <select id="unit-select">
+    <option value="F">Fahrenheit (°F)</option>
+    <option value="C">Celsius (°C)</option>
+  </select>
+  <canvas id="temperature-chart" width="400" height="200"></canvas>
+</div>
+
 
   <!-- Include required JavaScript libraries -->
   <script src="https://d3js.org/d3.v7.min.js"></script>
