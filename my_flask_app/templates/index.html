@@ -11,47 +11,60 @@
 <body>
   <h1>Travel Dashboard</h1>
 
-  <!-- Form for flight offers search -->
   <form id="searchForm" method="POST">
-    <label for="departureCity">Departure City:</label>
-    <input type="text" id="departureCity" name="departureCity" placeholder="E.g., New York" required>
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="departureCity">Departure City:</label>
+        <input type="text" id="departureCity" name="departureCity" placeholder="E.g., New York" required>
+      </div>
+      <div class="form-group">
+        <label for="destinationCity">Destination City:</label>
+        <input type="text" id="destinationCity" name="destinationCity" placeholder="E.g., Los Angeles" required>
+      </div>
+      <div class="form-group">
+        <label for="departureDate">Departure Date:</label>
+        <input type="date" id="departureDate" name="departureDate" required>
+      </div>
+      <div class="form-group">
+        <label for="adults">Number of Adults:</label>
+        <input type="number" id="adults" name="adults" min="1" max="9" required>
+      </div>
+    </div>
 
-    <label for="destinationCity">Destination City:</label>
-    <input type="text" id="destinationCity" name="destinationCity" placeholder="E.g., Los Angeles" required>
-
-    <label for="departureDate">Departure Date:</label>
-    <input type="date" id="departureDate" name="departureDate" required>
-
-    <label for="adults">Number of Adults:</label>
-    <input type="number" id="adults" name="adults" min="1" max="9" required>
-
-    <button id="submit" type="submit">Search Location</button>
-    <button id="resetBtn" type="button">Make a New Search</button>
+    <div class="form-buttons">
+      <button id="submit" type="submit">Search Location</button>
+      <button id="resetBtn" type="button" style="background-color:gray;">Make a New Search</button>
+    </div>
   </form>
 
-
   <br>
+
   <div id="results-container">
-    <!-- Containers for weather information and map -->
-    <div id="weather-info"></div>
-    <div id="map" style="width: 400px; height: 400px;"></div>
+    <!-- Top area: Chart on left, Weather above Map on right -->
+    <div class="info-row">
+      <div id="chart-container">
+        <h2>Temperature Forecast</h2>
+        <label for="unit-select">Choose unit:</label>
+        <select id="unit-select">
+          <option value="F">Fahrenheit (°F)</option>
+          <option value="C">Celsius (°C)</option>
+        </select>
+        <canvas id="temperature-chart"></canvas>
+      </div>
 
-    <!-- Container for displaying flight offers -->
-    <ul id="flightOffersList"></ul>
+      <div id="weather-info"></div>
+      <div id="map"></div>
+    </div>
 
-    <!-- Container for displaying flight offers in a table -->
-    <div id="flightOffersTable"></div>
-
-    <div id="chart-container">
-      <h2>Temperature Forecast</h2>
-      <label for="unit-select">Choose unit:</label>
-      <select id="unit-select">
-      <option value="F">Fahrenheit (°F)</option>
-      <option value="C">Celsius (°C)</option>
-      </select>
-      <canvas id="temperature-chart" width="400" height="200"></canvas>
+    <!-- Flight offers below... -->
+    <div class="middle-section">
+      <ul id="flightOffersList"></ul>
+      <div id="flightOffersTable"></div>
     </div>
   </div>
+
+
+
 
   <!-- Include required JavaScript libraries -->
   <script src="https://d3js.org/d3.v7.min.js"></script>

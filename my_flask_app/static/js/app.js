@@ -249,3 +249,11 @@ document.getElementById("resetBtn").addEventListener("click", () => {
   });
 });
 
+document.getElementById("unit-select").addEventListener("change", function () {
+  currentUnit = this.value;
+  if (destinationCity) {
+    updateTemperatureChart(destinationCity);
+  }
+});
+
+
