@@ -4,10 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Travel Dashboard</title>
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-  />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+  <link rel="stylesheet" href="../static/css/styles.css" />
 </head>
 
 <body>
@@ -18,7 +16,7 @@
     <label for="departureCity">Departure City:</label>
     <input type="text" id="departureCity" name="departureCity" placeholder="E.g., New York" required>
 
-    <label for "destinationCity">Destination City:</label>
+    <label for="destinationCity">Destination City:</label>
     <input type="text" id="destinationCity" name="destinationCity" placeholder="E.g., Los Angeles" required>
 
     <label for="departureDate">Departure Date:</label>
@@ -28,7 +26,9 @@
     <input type="number" id="adults" name="adults" min="1" max="9" required>
 
     <button id="submit" type="submit">Search Location</button>
+    <button id="resetBtn" type="button">Make a New Search</button>
   </form>
+
 
   <br>
 

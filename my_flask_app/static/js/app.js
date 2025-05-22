@@ -393,3 +393,35 @@ function logCoordinatesToConsole(coord) {
     console.log("Latitude:", coord.lat);
     console.log("Longitude:", coord.lon);
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  const resetBtn = document.getElementById("resetBtn");
+  const form = document.getElementById("searchForm");
+
+  resetBtn.addEventListener("click", () => {
+    // Reset form fields
+    form.reset();
+
+    // Clear results
+    document.getElementById("weather-info").innerHTML = "";
+    document.getElementById("flightOffersList").innerHTML = "";
+    document.getElementById("flightOffersTable").innerHTML = "";
+
+    // Clear charts if using Chart.js
+    const charts = ["high-temperature-chart", "low-temperature-chart", "temperature-chart-celsius", "temperature-chart-fahrenheit"];
+    charts.forEach(id => {
+      const canvas = document.getElementById(id);
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    });
+
+    // Optional: reset or remove map content
+    if (typeof map !== "undefined") {
+      map.eachLayer(layer => {
+        if (layer instanceof L.Marker || layer instanceof L.Circle || layer instanceof L.Polyline) {
+          map.removeLayer(layer);
+        }
+      });
+    }
+  });
+});
