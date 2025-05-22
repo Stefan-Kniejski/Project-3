@@ -31,27 +31,27 @@
 
 
   <br>
+  <div id="results-container">
+    <!-- Containers for weather information and map -->
+    <div id="weather-info"></div>
+    <div id="map" style="width: 400px; height: 400px;"></div>
 
-  <!-- Containers for weather information and map -->
-  <div id="weather-info"></div>
-  <div id="map" style="width: 400px; height: 400px;"></div>
+    <!-- Container for displaying flight offers -->
+    <ul id="flightOffersList"></ul>
 
-  <!-- Container for displaying flight offers -->
-  <ul id="flightOffersList"></ul>
+    <!-- Container for displaying flight offers in a table -->
+    <div id="flightOffersTable"></div>
 
-  <!-- Container for displaying flight offers in a table -->
-  <div id="flightOffersTable"></div>
-
-<div id="chart-container">
-  <h2>Temperature Forecast</h2>
-  <label for="unit-select">Choose unit:</label>
-  <select id="unit-select">
-    <option value="F">Fahrenheit (°F)</option>
-    <option value="C">Celsius (°C)</option>
-  </select>
-  <canvas id="temperature-chart" width="400" height="200"></canvas>
-</div>
-
+    <div id="chart-container">
+      <h2>Temperature Forecast</h2>
+      <label for="unit-select">Choose unit:</label>
+      <select id="unit-select">
+      <option value="F">Fahrenheit (°F)</option>
+      <option value="C">Celsius (°C)</option>
+      </select>
+      <canvas id="temperature-chart" width="400" height="200"></canvas>
+    </div>
+  </div>
 
   <!-- Include required JavaScript libraries -->
   <script src="https://d3js.org/d3.v7.min.js"></script>
